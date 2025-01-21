@@ -38,3 +38,9 @@ You can preview the production build with `npm run preview`.
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
 
 HOW TO START A SVELTEKIT PROJECT: https://svelte.dev/docs/kit/creating-a-project
+HOW TO ADD TAILWIND: https://tailwindcss.com/docs/guides/sveltekit
+
+SIMPLE PROJECTS:
+1. SOUNDBOARD
+2. A STOPWATCH
+3. 
