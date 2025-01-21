@@ -50,7 +50,8 @@
 			<div class="flex flex-col justify-between border">
 				<img src={item.img} class="max-w-[200px]" alt={item.name} />
 				<span>{item.name}: ${item.price}</span>
-				<Button text="Add to cart" onClick={() => addToCart(item)} />
+				<Button text="Add to cart" color="bg-green-600" onClick={() => addToCart(item)} />
+				<Button text="Remove from cart" color="bg-red-600" />
 			</div>
 		{/each}
 	</div>
