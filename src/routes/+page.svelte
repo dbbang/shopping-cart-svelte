@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/button.svelte';
+	import Card from '$lib/components/card.svelte';
 
 	type Item = {
 		name: string;
@@ -30,42 +31,98 @@
 		}
 	];
 
-	let cart: Item[] = [];
+	let cart: CartItem[] = [];
+
+	let cartTotal = 0;
 
 	const addToCart = (itemToAdd: Item) => {
-		cart = [...cart, itemToAdd];
+		// whenever item is clicked, update the count of that item
+		// only ever be one for every unique type of item
+		const foundCartItem = cart.find((cartItem) => cartItem.item.name === itemToAdd.name);
+		if (foundCartItem) {
+			// we found the item in your cart already, increment the count
+
+			// copy the original CartItem, but increment its count
+			const updatedCartItem = { ...foundCartItem, count: foundCartItem.count + 1 };
+
+			// replace the old CartItem with the updated CartItem
+			cart = cart.map((cartItem) =>
+				cartItem.item.name === updatedCartItem.item.name ? updatedCartItem : cartItem
+			);
+		} else {
+			// adding an in item to the cart for the very first time
+
+			// construct CartItem object using
+			const newCartItem = {
+				item: itemToAdd,
+				count: 1
+			};
+
+			// add new CartItem object to cart
+			cart = [...cart, newCartItem];
+		}
 	};
 
-	const removeFromCart = (indexToRemove: number) => {
-		cart = cart.filter((_, cartIndex) => {
-			return cartIndex !== indexToRemove;
-		});
+	const removeFromCart = (itemToRemove: CartItem) => {
+		const updatedCartItem = { ...itemToRemove, count: itemToRemove.count - 1 };
+
+		if (updatedCartItem.count <= 0) {
+			cart = cart.filter((cartItem) => cartItem.item.name !== updatedCartItem.item.name);
+		} else {
+			// updates with the decremeneted
+			cart = cart.map((cartItem) =>
+				cartItem.item.name === updatedCartItem.item.name ? updatedCartItem : cartItem
+			);
+		}
 	};
+
+	$: {
+		// find sum
+		let newTotal = 0;
+
+		// for (let i = 0; i < cart.length; i++) {
+		// 	const cartItem = cart[i];
+		// }
+		for (const cartItem of cart) {
+			newTotal += cartItem.count * cartItem.item.price;
+		}
+
+		// replace cartTotal with newTotal
+		cartTotal = newTotal;
+	}
 </script>
 
 <div class="p-4 flex flex-col gap-3">
 	<h1>Catalog</h1>
-	<div class="flex gap-2 flex-wrap">
+	<div class="flex gap-4 flex-wrap">
 		{#each catalog as item}
-			<div class="flex flex-col justify-between border">
-				<img src={item.img} class="max-w-[200px]" alt={item.name} />
-				<span>{item.name}: ${item.price}</span>
-				<Button text="Add to cart" color="bg-green-600" onClick={() => addToCart(item)} />
-				<Button text="Remove from cart" color="bg-red-600" />
-			</div>
+			<Card
+				imageSrc={item.img}
+				name={item.name}
+				price={item.price}
+				color="bg-green-600"
+				onButtonClick={() => addToCart(item)}
+				buttonText="Add to cart"
+			/>
 		{/each}
 	</div>
 
 	<h1>Cart</h1>
 	{#if cart.length > 0}
-		<div class="flex gap-2 flex-wrap">
-			{#each cart as item, index}
-				<div class="flex flex-col justify-between border">
-					<img src={item.img} class="max-w-[200px]" alt={item.name} />
-					<span>{item.name}: ${item.price}</span>
-					<Button text="Remove from cart" onClick={() => removeFromCart(index)} />
-				</div>
+		<div class="flex gap-4 flex-wrap">
+			{#each cart as cartItem, index}
+				<Card
+					imageSrc={cartItem.item.img}
+					name={cartItem.item.name}
+					price={cartItem.item.price}
+					count={cartItem.count}
+					color="bg-red-600"
+					onButtonClick={() => removeFromCart(cartItem)}
+					buttonText="Remove from cart"
+				/>
 			{/each}
 		</div>
 	{/if}
+
+	<div>Total: ${cartTotal}</div>
 </div>
