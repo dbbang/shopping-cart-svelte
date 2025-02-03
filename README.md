@@ -40,9 +40,15 @@ You can preview the production build with `npm run preview`.
 HOW TO START A SVELTEKIT PROJECT: https://svelte.dev/docs/kit/creating-a-project
 HOW TO ADD TAILWIND: https://tailwindcss.com/docs/guides/sveltekit
 
-
 HW 1/23/25
+
 - Add a button to clear the cart
 - Move the cart to the right side, continue using the cards that we made
 - Add a button somewhere on the cart items that removes the entire type of item from your cart
 - When clicking on an image, display details about the image
+
+HW 1/31/25
+We've done the sorts of problems below in JS, but now let's repeat them using Svelte. Use knowledge from previous assignments but implement them in our new Svelte environment.
+
+- Add a `category` field to your items. Add UI that allows the user to filter the catalog by those categories (bonus: do not hardcode the categories when allowing the user to select one to filter by - instead get the list of categories from the data itself)
+- Add UI that allows the user to sort the catalog by price and name and also in reverse order.
